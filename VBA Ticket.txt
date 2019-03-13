@@ -1,0 +1,39 @@
+Option Explicit
+Sub Ticket()
+Dim a, b As Long
+Dim wb As Workbook: Set wb = ThisWorkbook
+Application.Calculation = xlManual
+
+a = wb.Sheets("Database v1").Range("A2").End(xlDown).Row
+b = wb.Sheets("Fleet Report").Range("A2").End(xlDown).Row
+wb.Sheets("Fleet Report").Range("E2:F2").AutoFill Destination:=wb.Sheets("Fleet Report").Range("E2" & ":F" & b), Type:=xlFillDefault
+
+Application.Calculation = xlAutomatic
+
+
+wb.Sheets("Database v1").Range("A3:A" & a).EntireRow.Delete
+wb.Sheets("Database v2").Range("A3:A" & a).EntireRow.Delete
+
+
+
+wb.Sheets("Fleet Report").Range("C2:C" & b).Copy
+wb.Sheets("Database v1").Range("E2").PasteSpecial Paste:=xlAll
+wb.Sheets("Database v2").Range("E2").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+wb.Sheets("Fleet Report").Range("B2:B" & b).Copy
+wb.Sheets("Database v1").Range("A2").PasteSpecial Paste:=xlAll
+wb.Sheets("Database v2").Range("A2").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+wb.Sheets("Fleet Report").Range("F2:F" & b).Copy
+wb.Sheets("Database v1").Range("F2").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+wb.Sheets("Database v2").Range("F2").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+Application.CutCopyMode = False
+
+wb.Sheets("Database v1").Range("B2:D2").AutoFill Destination:=wb.Sheets("Database v1").Range("B2" & ":D" & b), Type:=xlFillDefault
+wb.Sheets("Database v1").Range("G2:I2").AutoFill Destination:=wb.Sheets("Database v1").Range("G2" & ":I" & b), Type:=xlFillDefault
+wb.Sheets("Database v2").Range("B2:D2").AutoFill Destination:=wb.Sheets("Database v2").Range("B2" & ":D" & b), Type:=xlFillDefault
+wb.Sheets("Database v2").Range("G2:H2").AutoFill Destination:=wb.Sheets("Database v2").Range("G2" & ":H" & b), Type:=xlFillDefault
+End Sub
+

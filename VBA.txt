@@ -1,0 +1,207 @@
+﻿5.
+Function IsEven1(ByVal Number As Integer) As Boolean
+If Number Mod 2 = 0 Then
+IsEven1 = True
+Else
+IsEven1 = False
+End If
+End Function
+
+6.Function Suit(ByVal a As Integer) As String
+If a <= 13 Then
+Suit = "C"
+Else
+If a <= 26 Then
+Suit = "D"
+Else
+If a <= 39 Then
+Suit = "H"
+Else
+If a <= 52 Then
+Suit = "S"
+End If
+End If
+End If
+End If
+End Function
+
+7.
+Sub TicketCopy()
+Dim G As Range
+With Worksheets("Formulas")
+Set G = Range(.Range("A3"), .Range("A3").End(xlDown).End(xlToRight))
+G.ClearContents
+End With
+Dim M As Long
+With Worksheets("F0MEM")
+M = Range(.Range("A1"), .Range("A1").End(xlDown)).Rows.Count
+End With
+With Worksheets("Formulas")
+Range("A2:Z2").AutoFill Destination:=Range("A2:Z" & M), Type:=xlFillDefault
+End With
+End Sub
+
+8.
+Option Explicit
+Sub Scorecard()
+Application.Calculation = xlManual
+Dim Target_Workbook As Workbook, Templete As Workbook, Fast_Scan As Workbook, Telogis As Workbook
+Dim Path As String, a As String, Path_Ex As String, Telogis_Ex As String
+Dim b As Long, c As Long, d As Long, e As Long, f As Long, g As Long
+Dim W As Date, V As Date
+Dim Z As Range
+a = InputBox(Prompt:="Week End Date:", _
+          Title:="Enter Your Week End Date")
+Path = "C:\Users\xyang\Desktop\Report\Transportation_Scorecard\" & a & "\Transportation Scorecard.xlsx"
+Path_Ex = "C:\Users\xyang\Desktop\Report\Transportation_Scorecard\" & a & "\Transportation Scorecard Fast Scans.xlsx"
+Telogis_Ex = "C:\Users\xyang\Desktop\Report\Transportation_Scorecard\" & a & "\telogis_reporting_weekly_safety_exceptions_for_all_fleet_team_insight.xlsx"
+Set Target_Workbook = Workbooks.Open(Path)
+Set Fast_Scan = Workbooks.Open(Path_Ex)
+Set Telogis = Workbooks.Open(Telogis_Ex)
+Set Templete = ThisWorkbook
+Templete.Worksheets("Bottom Five Logs").Range("A2", Range("A2").End(xlToRight).End(xlDown).Address).Clear
+Target_Workbook.Worksheets("Bottom Five Logs").Range("A2", Range("A2").End(xlToRight).End(xlDown).Address).Copy
+Templete.Worksheets("Bottom Five Logs").Range("A2").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Routes LW").Range("A:U").Clear
+Target_Workbook.Worksheets("Routes LW").Range("A:U").Copy
+Templete.Worksheets("Routes LW").Range("A:U").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Employee Log").Range("A:O").Clear
+Target_Workbook.Worksheets("Employee Log").Range("A:O").Copy
+Templete.Worksheets("Employee Log").Range("A:O").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Summons").Range("A:I").Clear
+Target_Workbook.Worksheets("Summons").Range("A:I").Copy
+Templete.Worksheets("Summons").Range("A:I").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+b = Templete.Worksheets("Crosstab").Range("E3").End(xlDown).Row
+c = Target_Workbook.Worksheets("Crosstab").Range("A2").End(xlDown).Row
+Templete.Worksheets("Crosstab").Range("E3:F" & b).Clear
+Target_Workbook.Worksheets("Crosstab").Range("A2:B" & c).Copy
+Templete.Worksheets("Crosstab").Range("E3").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Supervisor").Range("A:G").Clear
+Target_Workbook.Worksheets("Supervisor").Range("A:G").Copy
+Templete.Worksheets("Supervisor").Range("A:G").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Cartons").Range("A:E").Clear
+Target_Workbook.Worksheets("Cartons").Range("A:E").Copy
+Templete.Worksheets("Cartons").Range("A:E").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Delivery").Range("A:N").Clear
+Target_Workbook.Worksheets("Delivery").Range("A:N").Copy
+Templete.Worksheets("Delivery").Range("A:N").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Hours").Range("A:N").Clear
+Target_Workbook.Worksheets("Hours").Range("A:N").Copy
+Templete.Worksheets("Hours").Range("A:N").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("ETA").Range("A:D").Clear
+Target_Workbook.Worksheets("ETA").Range("A:D").Copy
+Templete.Worksheets("ETA").Range("A:D").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Unreachable").Range("A:G").Clear
+Target_Workbook.Worksheets("Unreachable").Range("A:G").Copy
+Templete.Worksheets("Unreachable").Range("A:G").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Accidents").Range("A:G").Clear
+Target_Workbook.Worksheets("Accidents").Range("A:G").Copy
+Templete.Worksheets("Accidents").Range("A:G").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("Absent").Range("A:D").Clear
+Target_Workbook.Worksheets("Absent").Range("A:D").Copy
+Templete.Worksheets("Absent").Range("A:D").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Templete.Worksheets("160 Academy").Range("A:E").Clear
+Target_Workbook.Worksheets("160 Academy").Range("A:E").Copy
+Templete.Worksheets("160 Academy").Range("A:E").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+'Finish the copy of first raw data'
+
+Templete.Worksheets("Fast Scans").Range("A:G").Clear
+Fast_Scan.Worksheets("Data").Range("A:G").Copy
+Templete.Worksheets("Fast Scans").Range("A:G").PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+'Finish the copy of fast scanning data'
+
+
+W = DateSerial(Left(a, 4), Mid(a, 5, 2), Right(a, 2))
+d = Templete.Worksheets("Telogis Data").Range("b2").End(xlDown).Row
+e = Telogis.Worksheets(1).Range("b7").End(xlDown).Row
+Set Z = Templete.Worksheets("Telogis Data").Range("A2").End(xlDown)
+V = Application.Max(Z)
+If W > V Then
+
+Telogis.Worksheets(1).Range("A7:A" & e).Copy
+Templete.Worksheets("Telogis Data").Range("B" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Telogis.Worksheets(1).Range("B7:B" & e).Copy
+Templete.Worksheets("Telogis Data").Range("C" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Telogis.Worksheets(1).Range("C7:C" & e).Copy
+Templete.Worksheets("Telogis Data").Range("G" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Telogis.Worksheets(1).Range("D7:D" & e).Copy
+Templete.Worksheets("Telogis Data").Range("F" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Telogis.Worksheets(1).Range("E7:E" & e).Copy
+Templete.Worksheets("Telogis Data").Range("E" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Telogis.Worksheets(1).Range("F7:F" & e).Copy
+Templete.Worksheets("Telogis Data").Range("D" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+
+Telogis.Worksheets(1).Range("G7:H" & e).Copy
+Templete.Worksheets("Telogis Data").Range("H" & d + 1).PasteSpecial Paste:=xlAll
+Application.CutCopyMode = False
+Application.Calculation = xlManual
+f = Templete.Worksheets("Telogis Data").Range("b2").End(xlDown).Row
+Templete.Worksheets("Telogis Data").Range("J" & d & ":L" & d).AutoFill Destination:=Templete.Worksheets("Telogis Data").Range("J" & d & ":L" & f), Type:=xlFillDefault
+
+Templete.Worksheets("Telogis Data").Range("A" & d + 1 & ":A" & f).Value = W
+End If
+Target_Workbook.Close SaveChanges:=False
+Fast_Scan.Close SaveChanges:=False
+Telogis.Close SaveChanges:=False
+
+Application.Calculation = xlAutomatic
+
+g = Templete.Worksheets("TrendData").Range("C2").End(xlDown).Row
+Templete.Worksheets("Crosstab").Range("E1202:Y" & c + 1202 - 2).Copy
+Templete.Worksheets("TrendData").Range("C" & g + 1).PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+Templete.Worksheets("TrendData").Range("A" & g + 1 & ":A" & g + 1 + c - 2).Value = W
+Templete.Worksheets("TrendData").Range("B" & g).AutoFill Destination:=Templete.Worksheets("TrendData").Range("B" & g & ":B" & g + 1 + c - 2), Type:=xlFillDefault
+Templete.Worksheets("TrendData").Range("X" & g).AutoFill Destination:=Templete.Worksheets("TrendData").Range("X" & g & ":X" & g + 1 + c - 2), Type:=xlFillDefault
+Application.CutCopyMode = False
+
+Templete.Worksheets("Crosstab").Range("E1202:AK" & c + 1202 - 2).Copy
+Templete.Worksheets("Historical").Range("C" & g + 1).PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+Templete.Worksheets("Historical").Range("A" & g + 1 & ":A" & g + 1 + c - 2).Value = W
+Templete.Worksheets("Historical").Range("B" & g).AutoFill Destination:=Templete.Worksheets("Historical").Range("B" & g & ":B" & g + 1 + c - 2), Type:=xlFillDefault
+Application.CutCopyMode = False
+
+Application.Calculation = xlManual
+
+End Sub
+
+
+

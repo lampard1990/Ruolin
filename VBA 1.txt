@@ -1,0 +1,122 @@
+1. Pring all options in data validation list
+
+Sub Iterate_Through_data_Validation()
+Dim dvCell As Range
+Dim inputRange As Range
+Dim c As Range
+
+'Which cell has data validation
+   Set dvCell = Worksheets("Trans Handout").Range("K3")
+'Determine where validation comes from
+   Set inputRange = Evaluate(dvCell.Validation.Formula1)
+   
+For Each c In inputRange
+    If c <> "" Then
+    dvCell = c.Value
+    Worksheets("Trans Handout").PrintOut
+    End If
+Next c
+
+End Sub
+
+2. Export all tabs as PDF
+
+Option Explicit
+
+Sub createPDFfiles()
+    Dim ws As Worksheet
+    Dim Fname As String
+    Dim mypath As String
+    mypath = ActiveWorkbook.Path
+    For Each ws In ActiveWorkbook.Worksheets
+        On Error Resume Next 'Continue if an error occurs
+        If (ws.Name <> "Template") And (ws.Name <> "Fleet") Then
+
+        Fname = mypath & "\" & ws.Name
+
+        ws.ExportAsFixedFormat _
+            Type:=xlTypePDF, _
+            Filename:=Fname, _
+            Quality:=xlQualityStandard, _
+            IncludeDocProperties:=True, _
+            IgnorePrintAreas:=False
+    End If
+    Next ws
+End Sub
+
+3. PasteSpecial_ValuesOnly
+
+Sub PasteSpecial_ValuesOnly()
+Dim a As Range, b As Range
+With ThisWorkbook.Sheets("Values")
+Worksheets("Values").Range("A2:Y" & .Range("A2").End(xlDown).Row).ClearContents
+End With
+With Worksheets("Formulas")
+Set a = Worksheets("Formulas").Range("A2:Y" & .Range("A2").End(xlDown).Row)
+End With
+With Worksheets("Values")
+Set b = Worksheets("Values").Range("A2")
+End With
+a.Copy
+b.PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+Application.CutCopyMode = False
+End Sub
+
+(Sub test2()
+Worksheets("Formulas").Range("A:Y").Copy
+Worksheets("Values").Range("A:Y").PasteSpecial Paste:=xlPasteValuesAndNumberFormats
+Application.CutCopyMode = False
+End Sub)
+
+4. Call_Sub
+
+Sub Ruolin(a As Single, b As Single, c As Single)
+Const pi As Single = 3.14159
+b = a ^ 2 * pi * 10
+c = 2 * pi * a
+End Sub
+Sub Ruolin1()
+Dim x As Single, y As Single, z As Single
+x = 2
+y = 3
+z = 4
+Call Ruolin(x, y, z)
+MsgBox "The Varible 1 = " & y
+MsgBox "The Varible 2 = " & z
+End Sub
+
+5. Message Box
+
+Sub test3()
+Dim x As Single, y As Single, z As Single
+x = InputBox(Prompt:="x:", _
+          Title:="Enter The x", Default:="Your x here")
+          Call circle2(x, y, z)
+MsgBox "The Area of the Circle=" & y
+MsgBox "The Circumference of the Circle = " & z
+End Sub
+
+
+3. Copy template and paste to create tabs and name them as values in the list
+
+Sub MainMod()
+Application.Calculation = xlAutomatic
+Dim a As Range
+Dim ws As Worksheet, wk As Worksheet
+Dim b As Long
+Set ws = Sheets("Raw Data")
+Set wk = Sheets("1")
+b = ws.Range("A2").End(xlDown).Row
+For Each a In ws.Range("A2:A" & b)
+wk.Copy before:=wk
+ActiveSheet.Name = a.Value
+Application.Calculation = xlAutomatic
+'Format the activesheet
+ActiveSheet.Range("c22:f22").HorizontalAlignment = xlCenter
+ActiveSheet.Range("c22:f22").VerticalAlignment = xlCenter
+ActiveSheet.Range("c22:f22").Merge
+ActiveSheet.Range("c22:f22").Copy
+ActiveSheet.Range("c23:f72").PasteSpecial xlPasteFormats
+Next
+End Sub
+

@@ -1,0 +1,178 @@
+1. From>Where>Group By>Havning>Select>Order by
+2. The Having clause is evaluated before select clause and therefore.:
+   select id, sum(cost) as totalcost
+   from table
+   group by id
+   having sum(cost)>60000;
+3. http://docs.oracle.com/cd/E11882_01/appdev.112/e25519/controlstatements.htm#LNPLS391 (if and case statement)
+4. Where OrderID IS NOT NULL/Where OrderID IS NULL
+5. Select order id, orderdate, cusid
+   from table
+   order by (select null)-- return an arbitrary order
+   offset 0 rows fetch first 3 rows only;
+6. Select order id, orderdate, cusid
+   from table
+   order by orderdate DESC
+   offset 25 rows fetch next 3 rows only;
+7. Select s.companyname as suppllier, s.country,
+          p. productid, p.productname, p. unitprice,
+		  c. categoryname
+	From Production.Suppliers as s
+	     left outer join 
+		   (Production.Products as p
+		     inner join Production.Categories as c
+		     On c.categoriyid=p.categoryid)
+	      on s.supplierid=p.supplierid
+    Where s.country=N'Japan';
+8. --Seft-Contained Subqueries	
+    Select productid, productname, unitprice
+	From Production.Products
+	Where suppliersid in(not in/=)
+	     (select suppliersid
+		  from Production.Products
+		  where country=N'Japan');
+9. --Correlated Subqueries
+     Select categoryid, productid, productname, unitprice 
+	 From Production.Product as P1
+	 Where unitprice=
+	 (select min(uniprice)
+	 from Production.Product as P2
+	 WHERE P2.categoryid=P1.categoryid);
+	 
+	 Select custid, companyname
+	 From Sales.Cutomers as C
+	 Where Exists
+	 (Select *
+	 From Sales.Orders as O
+	 where O.custid=C.custid
+	 and O.orderdate='20070212');
+ 
+10. Table Expressions
+    
+	Derived Tables
+	Select..
+	From
+	(Select..
+	From
+	(Select...
+	From Table 1) as D1
+	Where...
+	) as D2
+	Where....;
+	
+	CTEs Common table expression
+	With C1 AS
+	(
+	Select 
+	From T1
+	WHERE)
+	),
+	C2 as
+	(select... 
+	From C1
+	where..)
+	select...
+	From C2..
+	
+	with Activity_Rank as
+(
+select 
+    link_id,
+    created_by_user,
+    case_created,
+    datestamp,
+    activity,
+    user_stamp_user,
+    notes,
+    rank() over (partition by link_id, activity order by datestamp) as activity_rank
+from 
+    FD_STG.STG_FDCS_FDECMS
+where category = 'Transp Communications'
+    and trunc(case_created) BETWEEN trunc(sysdate,'yyyy') AND trunc(sysdate)
+),
+First_Activity
+as
+(
+select
+link_id,
+    created_by_user,
+    case_created,
+    datestamp,
+    activity,
+    user_stamp_user,
+    notes
+from
+Activity_Rank
+where
+activity_rank=1)
+select
+    link_id,
+    created_by_user as Created_User,
+    case_created as Created_Timestamp,
+    replace(min(case when activity='New Case Created' then notes end),'<br />') as Created_Note,
+    min(case when activity='WIP-MGRFIELD: Updated Case' then user_stamp_user end) as Director_User,
+    min(case when activity='WIP-MGRFIELD: Updated Case' then datestamp end) as Director_Timestamp,
+    replace(min(case when activity='WIP-MGRFIELD: Updated Case' then notes end),'<br />')  as Director_Note,
+    min(case when activity='WIP-MGRSHIFT: Updated Case' then user_stamp_user end) as FieldMgr_User,
+    min(case when activity='WIP-MGRSHIFT: Updated Case' then datestamp end) as FieldMgr_Timestamp,
+    replace(min(case when activity='WIP-MGRSHIFT: Updated Case' then notes end),'<br />')  as FieldMgr_Note,    
+    min(case when activity='WIP-FD: Updated Case' then user_stamp_user end) as ShiftMgr_User,
+    min(case when activity='WIP-FD: Updated Case' then datestamp end) as ShiftMgr_Timestamp,
+    replace(min(case when activity='WIP-FD: Updated Case' then notes end),'<br />')  as ShiftMgr_Note,        
+    min(case when activity='Closed' then user_stamp_user end) as Closed_User,
+    min(case when activity='Closed' then datestamp end) as Closed_Timestamp,
+    replace(min(case when activity='Closed' then notes end),'<br />')  as Closed_Note 
+from
+   First_Activity
+group by 
+    link_id,
+    created_by_user,
+    case_created 
+/*  
+Closed
+New Case Created
+WIP-FD: Updated Case
+WIP-MGRFIELD: Updated Case
+WIP-MGRSHIFT: Updated Case
+Updated Case
+*/
+
+11. Union and Union All
+Union has an implied distinct property, meaning that it does not return duplicate rows
+    
+    Intersect/Except
+	
+12. Grouping Sets/Cube/Rollup
+
+13. Pivot
+WITH
+   T
+AS
+(
+   SELECT
+      DEPTNO,--Grouping Column
+      JOB,--Spreading column
+      SAL--Aggregation Column
+   FROM
+      EMP
+)
+SELECT
+   *
+FROM
+   T
+PIVOT
+(
+   MIN(SAL) AS MINSAL,
+   MAX(SAL) AS MAXSAL
+FOR
+   (JOB)
+IN
+   (
+      'CLERK' AS CLERK,
+      'SALESMAN' AS SALES
+   )
+)
+ORDER BY
+   DEPTNO;	
+   
+   

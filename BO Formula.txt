@@ -1,0 +1,40 @@
+=Count([DW Sales].[Order Id])/[Time In Hours] Where ([Paycodename]="PRODUCTIVE")
+
+
+=daysbetween([First Stop Arrival];[Last Stop Completed])*24*3600+
+(((
+ToNumber( Substr( FormatDate( [Last Stop Completed] ;"HH:mm:ss" ) ; 1 ; 2 ) ) * 60 * 60 +
+ToNumber( Substr( FormatDate( [Last Stop Completed] ;"HH:mm:ss" ) ; 4 ; 2 ) ) * 60 +
+ToNumber( Substr( FormatDate( [Last Stop Completed] ;"HH:mm:ss" ) ; 7 ; 2 ) )
+)
+-
+(
+ToNumber( Substr( FormatDate( [First Stop Arrival] ; "HH:mm:ss" ) ; 1 ;2 ) ) * 60 * 60 +
+ToNumber( Substr( FormatDate( [First Stop Arrival] ; "HH:mm:ss" ) ; 4 ; 2) ) * 60 +
+ToNumber( Substr( FormatDate( [First Stop Arrival] ; "HH:mm:ss" ) ; 7 ; 2) )
+)
+)
+)
+
+
+Count(Count([size]) In ([customer]) Where (Count([size]) In ([customer])=2))
+
+=FormatNumber(Floor([Average First Delivery]/3600) ;"00") + ":" + FormatNumber(Floor(Mod([Average First Delivery] ;3600)/60) ;"00") + ":" + FormatNumber(Mod(Mod([Average First Delivery] ;3600) ;60) ;"00")
+
+
+=RelativeDate([Telogis Start Time];[Pre Trip Minutes]/1440)
+
+
+=RunningSum(Count([Stop Sequence]+[Route No]);Col;([Delivery Date]))
+
+=Match(Upper([Complaint Notes]);"*UPSET*") 
+
+
+Week End Date
+Excel
+   =A3+7-WEEKDAY(A3,2)
+   =TODAY()+7-WEEKDAY(TODAY(),2)
+BO
+   =If(DayNumberOfWeek([Requested Date])<>7;RelativeDate([Requested Date];(1-DayNumberOfWeek([Requested Date]))+6);[Requested Date])
+SQL
+   next_day(CALENDAR_DATE - 1,'Sunday')
