@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\lampard1990\Desktop\Python\Debugging.py", line 25, in <module>
+    raise Exception('this is the error message')
+Exception: this is the error message
